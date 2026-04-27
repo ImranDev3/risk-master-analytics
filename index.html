@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RiskMaster Pro | Professional Trading Dashboard</title>
+    <meta name="description" content="Advanced Risk Management and Position Sizing tool for professional traders.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/lucide-static@0.321.0/lib/index.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i data-lucide="shield-check"></i>
+                </div>
+                <span>RiskMaster <span class="pro-tag">PRO</span></span>
+            </div>
+
+            <nav class="nav-menu">
+                <div class="nav-item active">
+                    <i data-lucide="layout-dashboard"></i>
+                    <span>Dashboard</span>
+                </div>
+                <div class="nav-item">
+                    <i data-lucide="calculator"></i>
+                    <span>Position Sizer</span>
+                </div>
+                <div class="nav-item">
+                    <i data-lucide="history"></i>
+                    <span>Trade Logs</span>
+                </div>
+                <div class="nav-item">
+                    <i data-lucide="settings"></i>
+                    <span>Settings</span>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="avatar">ID</div>
+                    <div class="user-info">
+                        <span class="name">Imran Dev</span>
+                        <span class="status">Premium Tier</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="search-bar">
+                    <i data-lucide="search"></i>
+                    <input type="text" placeholder="Search markets or tools...">
+                </div>
+                <div class="top-actions">
+                    <button class="icon-btn"><i data-lucide="bell"></i></button>
+                    <button class="icon-btn"><i data-lucide="moon"></i></button>
+                    <button class="btn btn-primary">Connect Exchange</button>
+                </div>
+            </header>
+
+            <div class="dashboard-grid">
+                <!-- Input Section -->
+                <section class="card calculator-card">
+                    <div class="card-header">
+                        <h2><i data-lucide="zap"></i> Quick Position Sizer</h2>
+                        <p>Calculate your risk in seconds</p>
+                    </div>
+                    <div class="input-group">
+                        <label for="account-balance">Account Balance ($)</label>
+                        <input type="number" id="account-balance" value="10000" step="100">
+                    </div>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="risk-percent">Risk (%)</label>
+                            <input type="number" id="risk-percent" value="1" step="0.1">
+                        </div>
+                        <div class="input-group">
+                            <label for="stop-loss">Stop Loss (Pips/Ticks)</label>
+                            <input type="number" id="stop-loss" value="20" step="1">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label for="entry-price">Entry Price</label>
+                        <input type="number" id="entry-price" placeholder="Optional">
+                    </div>
+                    <div class="input-group">
+                        <label for="exit-price">Target Price</label>
+                        <input type="number" id="exit-price" placeholder="Optional">
+                    </div>
+                    <button id="calculate-btn" class="btn btn-full">Calculate Trade</button>
+                </section>
+
+                <!-- Results Section -->
+                <section class="results-container">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <span class="stat-label">Position Size</span>
+                            <span class="stat-value" id="res-pos-size">0.50 Lot</span>
+                            <span class="stat-sub">Based on 1.0% Risk</span>
+                        </div>
+                        <div class="stat-card highlight">
+                            <span class="stat-label">Risk Amount</span>
+                            <span class="stat-value" id="res-risk-amt">$100.00</span>
+                            <span class="stat-sub">Total capital at risk</span>
+                        </div>
+                    </div>
+
+                    <div class="card visualizer-card">
+                        <div class="card-header">
+                            <h2>Risk-to-Reward Visualizer</h2>
+                        </div>
+                        <div class="visualizer-display">
+                            <div class="rr-graph">
+                                <div class="rr-segment reward" style="height: 60%;">
+                                    <span class="rr-label">Reward: 3.0x</span>
+                                    <span class="rr-val" id="res-reward-amt">$300.00</span>
+                                </div>
+                                <div class="rr-segment risk" style="height: 20%;">
+                                    <span class="rr-label">Risk: 1.0x</span>
+                                    <span class="rr-val" id="res-risk-val">$100.00</span>
+                                </div>
+                            </div>
+                            <div class="rr-stats">
+                                <div class="rr-stat-item">
+                                    <span>Ratio</span>
+                                    <strong id="res-rr-ratio">1:3.0</strong>
+                                </div>
+                                <div class="rr-stat-item">
+                                    <span>Win Prob. Required</span>
+                                    <strong id="res-win-prob">25%</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>
