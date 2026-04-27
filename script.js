@@ -145,13 +145,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Utilities ---
 
+    function updateMarketInfo() {
+        const priceEl = document.querySelector('.price-val');
+        const currentPrice = parseFloat(priceEl.innerText);
+        const change = (Math.random() - 0.5) * 0.0002;
+        const newPrice = currentPrice + change;
+        priceEl.innerText = newPrice.toFixed(4);
+        priceEl.className = `price-val ${change >= 0 ? 'up' : 'down'}`;
+    }
+
     function updateTickers() {
         visuals.tickerItems.forEach(item => {
             const span = item.querySelector('span');
-            const currentVal = parseFloat(span.innerText);
-            const change = (Math.random() - 0.5) * 0.1;
+            let currentVal = parseFloat(span.innerText);
+            const change = (Math.random() - 0.5) * 0.15;
             const newVal = currentVal + change;
-            span.innerText = `${newVal > 0 ? '+' : ''}${newVal.toFixed(2)}%`;
+            span.innerText = `${newVal >= 0 ? '+' : ''}${newVal.toFixed(2)}%`;
             span.className = newVal >= 0 ? 'up' : 'down';
         });
     }
@@ -163,24 +172,46 @@ document.addEventListener('DOMContentLoaded', () => {
             buttons.switches.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             currentMode = btn.dataset.mode;
+            
+            // Update UI context based on mode
+            const slLabel = document.querySelector('label[for="stop-loss"]') || document.querySelector('.input-group label:nth-child(1)'); // Fixed selection
+            // Find the SL label specifically
+            const labels = document.querySelectorAll('label');
+            labels.forEach(l => {
+                if(l.innerText.includes('Stop Loss')) {
+                    l.innerText = currentMode === 'forex' ? 'Stop Loss (Pips)' : 'Stop Loss (Points)';
+                }
+            });
+
             calculate();
         });
     });
 
+    // Add listeners to ALL inputs for instant dynamism
     Object.values(inputs).forEach(input => {
         input.addEventListener('input', calculate);
+        input.addEventListener('change', calculate);
     });
 
-    buttons.calculate.addEventListener('click', calculate);
+    buttons.calculate.addEventListener('click', () => {
+        calculate();
+        // Add a "calculating" ripple effect
+        buttons.calculate.style.opacity = '0.7';
+        setTimeout(() => buttons.calculate.style.opacity = '1', 200);
+    });
+
     buttons.save.addEventListener('click', saveTrade);
     buttons.clear.addEventListener('click', () => {
-        tradeHistory = [];
-        localStorage.removeItem('tradeHistory');
-        renderHistory();
+        if(confirm('Are you sure you want to clear your trade journal?')) {
+            tradeHistory = [];
+            localStorage.removeItem('tradeHistory');
+            renderHistory();
+        }
     });
 
     // Init
-    setInterval(updateTickers, 3000);
+    setInterval(updateTickers, 2500);
+    setInterval(updateMarketInfo, 1500);
     calculate();
     renderHistory();
 });
