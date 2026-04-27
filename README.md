@@ -1,86 +1,58 @@
-# 🛡️ RiskMaster Enterprise Suite
+# 🚀 RiskMaster Platinum: Product Hunt Edition
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Build Status](https://img.shields.io/badge/Version-1.2.0--Enterprise-blue.svg)]()
-[![Platform](https://img.shields.io/badge/Platform-Web-green.svg)]()
+[![Product Hunt](https://img.shields.io/badge/Product%20Hunt-Launching-orange?style=for-the-badge&logo=producthunt)](https://www.producthunt.com/)
+[![Version](https://img.shields.io/badge/Version-2.0.0--Platinum-gold?style=for-the-badge)]()
+[![License](https://img.shields.io/badge/License-Enterprise--MIT-blue?style=for-the-badge)]()
 
-**RiskMaster Enterprise** is a high-performance trading terminal designed for professional traders who prioritize precision in risk management. Built with a focus on institutional-grade aesthetics and real-time dynamism, it provides an all-in-one suite for position sizing, risk-to-reward visualization, and trade journaling.
-
----
-
-## ✨ Key Features
-
-### 🖥️ Institutional Trading Terminal
-A complex, multi-column dashboard inspired by professional platforms like Bloomberg and TradingView. Features high-contrast dark mode with glassmorphism 2.0 aesthetics.
-
-### 📊 Multi-Asset Position Sizer
-Toggle between specialized modes for different asset classes:
-- **Forex**: Standard Lot sizing with Pip-based risk calculation.
-- **Crypto**: Unit-based sizing for high-volatility tokens.
-- **Stocks**: Share-based calculations for equity markets.
-
-### 📈 Dynamic Risk Visualizer
-Real-time animated graphing of your trade setup. Instantly visualize:
-- Risk vs. Reward segments.
-- Required break-even win rate.
-- Total capital at risk ($) vs. Potential profit ($).
-
-### 📓 Persistent Trade Journal
-Integrated **LocalStorage** persistence allows you to:
-- Save trade setups instantly.
-- Track historical risk parameters.
-- Manage and review your trading plan across sessions.
-
-### ⚡ Real-Time Market Simulation
-Live ticker simulation providing continuous price and percentage fluctuations for major global pairs (BTC/USD, EUR/USD, Gold, etc.).
+**RiskMaster Platinum** is the world's most advanced web-based risk management suite for professional traders. Engineered for elite execution, this version is built to a "Product Hunt Launch" standard, featuring industry-leading analytics, scaling logic, and institutional-grade aesthetics.
 
 ---
 
-## 🛠️ Technology Stack
+## 🔥 New in Version 2.0 (Platinum)
 
-- **Frontend**: Vanilla HTML5, Semantic Structure.
-- **Styling**: Premium CSS3 (Custom Variables, Flexbox/Grid, Glassmorphic effects).
-- **Logic**: Vanilla ES6+ JavaScript (State management, Math engines).
-- **Icons**: Lucide-Static Icons.
-- **Typography**: Outfit, Plus Jakarta Sans, and JetBrains Mono for data-intensive areas.
+### 📈 Multi-Target Scaling Matrix
+Professional traders don't just exit all at once. Platinum allows you to define multiple **Take Profit (TP)** zones. The engine automatically calculates the **Weighted R:R** and net profitability across your entire exit strategy.
 
----
+### 💰 Net Profit Analytics (Inc. Commissions)
+Stop guessing your returns. RiskMaster now factors in **Broker Commissions** and **Slippage** to give you the exact net profit you can expect after fees.
 
-## 🚀 Getting Started
+### 🔮 100-Trade Equity Simulator
+Visualize your future. Our advanced Monte Carlo-style simulator projects your **Equity Curve** over the next 100 trades based on your current risk parameters and historical win rates.
 
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/ImranDev3/risk-master-analytics.git
-   ```
-2. **Open the application**:
-   Simply open `index.html` in any modern web browser. No installation or dependencies required.
-
-3. **How to use**:
-   - Set your **Account Balance**.
-   - Define your **Risk %** per trade.
-   - Enter your **Stop Loss** (Pips/Points).
-   - Watch the dashboard update **instantly** with your recommended position size.
+### ⛓️ Asset Correlation Matrix
+Dynamic tracking of market interdependencies. Monitor how different asset classes (Forex, Crypto, Indices) are correlating in real-time to avoid over-exposure.
 
 ---
 
-## 📸 Dashboard Preview
+## 💎 Features & capabilities
 
-> *Note: Open index.html to see the full animated experience.*
-
-- **Sidebar**: Easy navigation between Terminal, Insights, and Settings.
-- **Terminal**: The heart of the app where math meets market data.
-- **Journal**: Your history, saved and secured locally.
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Feel free to open an issue or submit a pull request if you have ideas for new features or improvements.
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+- **Institutional Terminal UI**: A high-density data dashboard with glassmorphism 2.0 and PH orange accents.
+- **Cross-Asset Engine**: Specialized math for Forex (Lots), Crypto (Units), and Stocks (Shares).
+- **Global Trade Vault**: Advanced journaling with local persistence for tracking complex setups.
+- **Live Market Alpha**: High-frequency ticker simulation for real-time market feel.
+- **One-Click Analysis**: Instant generation of required win-probability and risk distribution.
 
 ---
 
-**Developed with ❤️ by [Imran Dev](https://github.com/ImranDev3)**
+## 🛠️ Technology
+
+- **Core**: Vanilla HTML5 / ES6+ JavaScript.
+- **Visuals**: CSS3 Grid/Flexbox, Custom SVG Charting.
+- **Icons**: Lucide High-Res Vectors.
+- **Data**: State-driven reactive architecture.
+
+---
+
+## 🚀 Deployment
+
+1. **Clone**: `git clone https://github.com/ImranDev3/risk-master-analytics.git`
+2. **Launch**: Open `index.html` in your browser.
+3. **Analyze**: Input your equity and risk, and let the Platinum engine do the rest.
+
+---
+
+## 🤝 Support the Launch
+
+We are currently launching on **Product Hunt**! If you find this tool useful, please support our mission to bring professional-grade risk management to everyone.
+
+**Developed with 🛡️ by [Imran Dev](https://github.com/ImranDev3)**

@@ -3,15 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RiskMaster Enterprise | Advanced Trading Analytics</title>
-    <meta name="description" content="Enterprise-grade Risk Management and Position Sizing suite for professional traders.">
+    <title>RiskMaster PH | Product Hunt Launch Edition</title>
+    <meta name="description" content="The world's most advanced trading risk management suite. Launching on Product Hunt.">
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/lucide-static@0.321.0/lib/index.min.js"></script>
 </head>
 <body>
+    <div class="ph-banner">
+        <div class="ph-content">
+            <i data-lucide="award"></i>
+            <span>We're live on Product Hunt! Support our launch and get 50% off Pro features.</span>
+            <button class="ph-btn">Upvote Now</button>
+        </div>
+    </div>
+
     <div class="app-container">
         <!-- Sidebar -->
         <aside class="sidebar">
@@ -21,42 +29,50 @@
                 </div>
                 <div class="logo-text">
                     <span class="brand">RiskMaster</span>
-                    <span class="edition">ENTERPRISE</span>
+                    <span class="edition">PLATINUM</span>
                 </div>
             </div>
 
             <nav class="nav-menu">
-                <div class="nav-label">Main Menu</div>
+                <div class="nav-label">Core Suite</div>
                 <div class="nav-item active">
-                    <i data-lucide="layout-dashboard"></i>
-                    <span>Terminal</span>
+                    <i data-lucide="terminal"></i>
+                    <span>Trading Terminal</span>
                 </div>
                 <div class="nav-item">
-                    <i data-lucide="bar-chart-3"></i>
-                    <span>Market Insights</span>
+                    <i data-lucide="line-chart"></i>
+                    <span>Market Alpha</span>
                 </div>
                 <div class="nav-item">
-                    <i data-lucide="shield"></i>
-                    <span>Risk Guard</span>
+                    <i data-lucide="database"></i>
+                    <span>Risk Vault</span>
                 </div>
                 
-                <div class="nav-label">Analytics</div>
+                <div class="nav-label">Advanced Tools</div>
                 <div class="nav-item">
-                    <i data-lucide="scroll-text"></i>
-                    <span>Journal</span>
+                    <i data-lucide="calculator"></i>
+                    <span>Scaling Matrix</span>
                 </div>
                 <div class="nav-item">
-                    <i data-lucide="pie-chart"></i>
-                    <span>Portfolio</span>
+                    <i data-lucide="trending-up"></i>
+                    <span>Equity Projection</span>
+                </div>
+                <div class="nav-item">
+                    <i data-lucide="layers"></i>
+                    <span>Correlations</span>
                 </div>
             </nav>
 
             <div class="sidebar-footer">
+                <div class="pro-badge">
+                    <i data-lucide="zap"></i>
+                    <span>Platinum Access</span>
+                </div>
                 <div class="user-profile">
                     <div class="avatar">ID</div>
                     <div class="user-info">
                         <span class="name">Imran Dev</span>
-                        <span class="status"><i data-lucide="circle" class="online-dot"></i> Verified Pro</span>
+                        <span class="status">Verified Developer</span>
                     </div>
                 </div>
             </div>
@@ -64,180 +80,197 @@
 
         <!-- Main Content -->
         <main class="main-content">
-            <!-- Market Ticker -->
             <div class="ticker-wrap">
-                <div class="ticker">
-                    <div class="ticker-item">BTC/USD <span class="up">+2.4%</span></div>
-                    <div class="ticker-item">ETH/USD <span class="down">-1.2%</span></div>
-                    <div class="ticker-item">EUR/USD <span class="up">+0.15%</span></div>
-                    <div class="ticker-item">GOLD <span class="up">+0.8%</span></div>
-                    <div class="ticker-item">SPX500 <span class="down">-0.3%</span></div>
-                    <div class="ticker-item">TSLA <span class="up">+4.1%</span></div>
+                <div class="ticker" id="main-ticker">
+                    <!-- Ticker items injected by JS -->
                 </div>
             </div>
 
             <header class="top-bar">
                 <div class="page-info">
-                    <h1>Trading Terminal</h1>
-                    <p>Real-time risk analytics and execution planning</p>
+                    <h1>Platinum Terminal v2.0</h1>
+                    <p>High-frequency risk analytics for elite traders</p>
                 </div>
                 <div class="top-actions">
-                    <div class="market-status">
-                        <span class="blob green"></span>
-                        Markets Open
+                    <div class="connection-status">
+                        <span class="blob orange"></span>
+                        Connecting to LP...
                     </div>
-                    <button class="icon-btn"><i data-lucide="bell"></i><span class="badge">3</span></button>
-                    <button class="btn btn-outline">API Keys</button>
-                    <button class="btn btn-primary">Upgrade Plan</button>
+                    <button class="icon-btn"><i data-lucide="maximize"></i></button>
+                    <button class="icon-btn"><i data-lucide="settings"></i></button>
+                    <button class="btn btn-ph">PH Launch Mode</button>
                 </div>
             </header>
 
             <div class="dashboard-content">
-                <div class="terminal-grid">
-                    <!-- Left Column: Controls -->
-                    <div class="controls-col">
-                        <section class="card calculator-card">
-                            <div class="asset-switcher">
-                                <button class="switch-btn active" data-mode="forex">Forex</button>
-                                <button class="switch-btn" data-mode="crypto">Crypto</button>
-                                <button class="switch-btn" data-mode="stocks">Stocks</button>
+                <div class="layout-grid">
+                    <!-- Left: Control Panel -->
+                    <div class="panel controls-panel">
+                        <section class="card planner-card">
+                            <div class="asset-selector">
+                                <button class="asset-tab active" data-asset="forex">Forex</button>
+                                <button class="asset-tab" data-asset="crypto">Crypto</button>
+                                <button class="asset-tab" data-asset="stocks">Stocks</button>
+                                <button class="asset-tab" data-asset="indices">Indices</button>
                             </div>
 
-                            <div class="card-header">
-                                <h2>Trade Planner</h2>
-                            </div>
-
-                            <div class="input-grid">
-                                <div class="input-group">
-                                    <label>Account Balance ($)</label>
-                                    <div class="input-wrapper">
-                                        <i data-lucide="dollar-sign"></i>
-                                        <input type="number" id="account-balance" value="25000">
+                            <div class="planner-inputs">
+                                <div class="input-section">
+                                    <h4 class="section-title">Capital & Risk</h4>
+                                    <div class="input-row">
+                                        <div class="field">
+                                            <label>Equity ($)</label>
+                                            <input type="number" id="balance" value="50000">
+                                        </div>
+                                        <div class="field">
+                                            <label>Risk (%)</label>
+                                            <input type="number" id="risk-percent" value="1.0" step="0.1">
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="input-row">
-                                    <div class="input-group">
-                                        <label>Risk Per Trade (%)</label>
-                                        <input type="number" id="risk-percent" value="1.5" step="0.1">
-                                    </div>
-                                    <div class="input-group">
-                                        <label>Stop Loss (Pips)</label>
-                                        <input type="number" id="stop-loss" value="30">
+
+                                <div class="input-section">
+                                    <h4 class="section-title">Trade Entry</h4>
+                                    <div class="input-row">
+                                        <div class="field">
+                                            <label>Entry Price</label>
+                                            <input type="number" id="entry" placeholder="1.0850">
+                                        </div>
+                                        <div class="field">
+                                            <label>Stop Loss (Pips)</label>
+                                            <input type="number" id="sl" value="25">
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="input-row">
-                                    <div class="input-group">
-                                        <label>Entry Price</label>
-                                        <input type="number" id="entry-price" placeholder="1.0850">
+
+                                <div class="input-section scaling-section">
+                                    <div class="section-header">
+                                        <h4 class="section-title">Scaling Targets (Take Profit)</h4>
+                                        <button class="btn-icon-small" id="add-tp"><i data-lucide="plus"></i></button>
                                     </div>
-                                    <div class="input-group">
-                                        <label>Target Price</label>
-                                        <input type="number" id="exit-price" placeholder="1.0950">
+                                    <div id="tp-list" class="tp-list">
+                                        <div class="tp-item">
+                                            <label>TP 1 (50%)</label>
+                                            <input type="number" class="tp-price" placeholder="Target 1">
+                                        </div>
+                                        <div class="tp-item">
+                                            <label>TP 2 (50%)</label>
+                                            <input type="number" class="tp-price" placeholder="Target 2">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="input-section advanced">
+                                    <h4 class="section-title">Execution Params</h4>
+                                    <div class="input-row">
+                                        <div class="field">
+                                            <label>Commission ($/Lot)</label>
+                                            <input type="number" id="commission" value="7">
+                                        </div>
+                                        <div class="field">
+                                            <label>Slippage (Pips)</label>
+                                            <input type="number" id="slippage" value="0.2" step="0.1">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="advanced-toggle">
-                                <span>Advanced Options</span>
-                                <i data-lucide="chevron-down"></i>
-                            </div>
-
-                            <div class="action-buttons">
-                                <button id="calculate-btn" class="btn btn-primary btn-full">Generate Setup</button>
-                                <button id="save-trade-btn" class="btn btn-outline btn-full">Save to Journal</button>
+                            <div class="cta-group">
+                                <button class="btn btn-glow-primary" id="calc-btn">Analyze Strategy</button>
+                                <button class="btn btn-outline" id="save-btn">Journal Setup</button>
                             </div>
                         </section>
 
-                        <!-- Market Info Mini Card -->
-                        <div class="card market-info-card">
-                            <div class="market-pair-header">
-                                <div class="pair-icon">€$</div>
-                                <div>
-                                    <h3>EUR/USD</h3>
-                                    <p>Euro / US Dollar</p>
-                                </div>
-                                <div class="price-val up">1.0842</div>
+                        <!-- Market Correlation Card -->
+                        <div class="card correlation-card">
+                            <h3>Asset Correlations</h3>
+                            <div class="correlation-grid" id="correlation-matrix">
+                                <!-- Injected by JS -->
                             </div>
                         </div>
                     </div>
 
-                    <!-- Right Column: Visualization & History -->
-                    <div class="display-col">
-                        <div class="results-overview">
-                            <div class="summary-card">
-                                <span class="label">Recommended Size</span>
-                                <div class="value-row">
-                                    <span class="value" id="res-pos-size">1.25 Lot</span>
-                                    <span class="trend up"><i data-lucide="trending-up"></i> Optimal</span>
+                    <!-- Right: Results & Projections -->
+                    <div class="panel analytics-panel">
+                        <div class="stats-ribbon">
+                            <div class="ribbon-item highlight">
+                                <span class="label">Position Size</span>
+                                <span class="value" id="res-size">2.00 Lots</span>
+                            </div>
+                            <div class="ribbon-item">
+                                <span class="label">Gross Risk</span>
+                                <span class="value" id="res-risk">$500.00</span>
+                            </div>
+                            <div class="ribbon-item">
+                                <span class="label">Net Profit (Est.)</span>
+                                <span class="value text-green" id="res-profit">$1,240.00</span>
+                            </div>
+                            <div class="ribbon-item">
+                                <span class="label">Weighted R:R</span>
+                                <span class="value" id="res-rr">1:2.5</span>
+                            </div>
+                        </div>
+
+                        <div class="analytics-row">
+                            <div class="card vis-card">
+                                <h3>Risk Distribution</h3>
+                                <div class="vis-container">
+                                    <div class="vis-bar-wrap">
+                                        <div class="vis-segment reward-seg" id="bar-reward"><span>Target</span></div>
+                                        <div class="vis-segment risk-seg" id="bar-risk"><span>Stop</span></div>
+                                    </div>
+                                    <div class="vis-legend">
+                                        <div class="leg-item"><span class="dot green"></span> Reward Zone</div>
+                                        <div class="leg-item"><span class="dot red"></span> Risk Zone</div>
+                                        <div class="leg-item mt-2">
+                                            <small>Breakeven WinRate:</small>
+                                            <strong id="res-win">28%</strong>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="summary-card">
-                                <span class="label">Total Risk</span>
-                                <div class="value-row">
-                                    <span class="value" id="res-risk-amt">$375.00</span>
-                                    <span class="risk-label">Low Risk</span>
+
+                            <div class="card projection-card">
+                                <h3>100 Trade Equity Projection</h3>
+                                <div class="projection-canvas" id="equity-chart">
+                                    <!-- Simple SVG or Div-based bars for chart -->
+                                    <div class="chart-bars" id="chart-bars"></div>
                                 </div>
-                            </div>
-                            <div class="summary-card">
-                                <span class="label">Expected Profit</span>
-                                <div class="value-row">
-                                    <span class="value" id="res-reward-amt">$750.00</span>
-                                    <span class="ratio-label">2.0:1 R:R</span>
+                                <div class="projection-stats">
+                                    <div class="p-stat">
+                                        <label>Ending Balance</label>
+                                        <strong id="proj-end">$84,200</strong>
+                                    </div>
+                                    <div class="p-stat">
+                                        <label>Expected Growth</label>
+                                        <strong class="text-green" id="proj-growth">+68.4%</strong>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="card visualizer-section">
-                            <div class="card-header-row">
-                                <h2>Risk/Reward Visualization</h2>
-                                <div class="rr-stats-pills">
-                                    <span class="pill reward">Reward: $750</span>
-                                    <span class="pill risk">Risk: $375</span>
+                        <!-- Trade History -->
+                        <div class="card journal-card">
+                            <div class="card-header">
+                                <h3>Global Trade Vault</h3>
+                                <div class="header-actions">
+                                    <button class="btn-text">Export CSV</button>
+                                    <button class="btn-text" id="clear-vault">Clear All</button>
                                 </div>
                             </div>
-                            <div class="rr-container">
-                                <div class="rr-bars">
-                                    <div class="rr-bar-segment reward" style="height: 60%;">
-                                        <div class="bar-label">Profit Target</div>
-                                    </div>
-                                    <div class="rr-bar-segment risk" style="height: 30%;">
-                                        <div class="bar-label">Stop Loss</div>
-                                    </div>
-                                </div>
-                                <div class="rr-info-panel">
-                                    <div class="info-item">
-                                        <label>Required Win Rate</label>
-                                        <div class="big-val" id="res-win-prob">33%</div>
-                                    </div>
-                                    <div class="info-item">
-                                        <label>R:R Ratio</label>
-                                        <div class="big-val" id="res-rr-ratio">1:2.0</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Trade History Table -->
-                        <div class="card history-section">
-                            <div class="card-header-row">
-                                <h2>Trade Journal</h2>
-                                <button class="btn-text" id="clear-history">Clear History</button>
-                            </div>
-                            <div class="table-container">
-                                <table id="history-table">
+                            <div class="table-wrap">
+                                <table>
                                     <thead>
                                         <tr>
-                                            <th>Date</th>
-                                            <th>Pair</th>
-                                            <th>Size</th>
-                                            <th>Risk</th>
-                                            <th>Reward</th>
-                                            <th>R:R</th>
-                                            <th>Action</th>
+                                            <th>Timestamp</th>
+                                            <th>Asset</th>
+                                            <th>Risk/Reward</th>
+                                            <th>Net Profit</th>
+                                            <th>Status</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="history-body">
-                                        <!-- History items will be injected here -->
+                                    <tbody id="vault-body">
+                                        <!-- Injected by JS -->
                                     </tbody>
                                 </table>
                             </div>

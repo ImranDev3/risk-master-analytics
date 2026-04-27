@@ -1,217 +1,252 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // State
-    let currentMode = 'forex';
-    let tradeHistory = JSON.parse(localStorage.getItem('tradeHistory')) || [];
+    // --- State Management ---
+    let currentAsset = 'forex';
+    let vaultData = JSON.parse(localStorage.getItem('tradeVault')) || [];
+    let targets = [
+        { id: 1, weight: 50, price: 0 },
+        { id: 2, weight: 50, price: 0 }
+    ];
 
-    // Elements
+    // --- Element Mapping ---
     const inputs = {
-        balance: document.getElementById('account-balance'),
+        balance: document.getElementById('balance'),
         risk: document.getElementById('risk-percent'),
-        sl: document.getElementById('stop-loss'),
-        entry: document.getElementById('entry-price'),
-        target: document.getElementById('exit-price')
+        entry: document.getElementById('entry'),
+        sl: document.getElementById('sl'),
+        commission: document.getElementById('commission'),
+        slippage: document.getElementById('slippage')
     };
 
     const outputs = {
-        size: document.getElementById('res-pos-size'),
-        riskAmt: document.getElementById('res-risk-amt'),
-        rewardAmt: document.getElementById('res-reward-amt'),
-        rr: document.getElementById('res-rr-ratio'),
-        winProb: document.getElementById('res-win-prob')
+        size: document.getElementById('res-size'),
+        risk: document.getElementById('res-risk'),
+        profit: document.getElementById('res-profit'),
+        rr: document.getElementById('res-rr'),
+        win: document.getElementById('res-win'),
+        endBal: document.getElementById('proj-end'),
+        growth: document.getElementById('proj-growth')
     };
 
-    const visuals = {
-        rewardBar: document.querySelector('.rr-bar-segment.reward'),
-        riskBar: document.querySelector('.rr-bar-segment.risk'),
-        historyBody: document.getElementById('history-body'),
-        tickerItems: document.querySelectorAll('.ticker-item')
+    const components = {
+        vaultBody: document.getElementById('vault-body'),
+        barReward: document.getElementById('bar-reward'),
+        barRisk: document.getElementById('bar-risk'),
+        chartBars: document.getElementById('chart-bars'),
+        correlationMatrix: document.getElementById('correlation-matrix'),
+        ticker: document.getElementById('main-ticker')
     };
 
-    const buttons = {
-        calculate: document.getElementById('calculate-btn'),
-        save: document.getElementById('save-trade-btn'),
-        clear: document.getElementById('clear-history'),
-        switches: document.querySelectorAll('.switch-btn')
-    };
-
-    // --- Core Logic ---
+    // --- Core Calculation Engine ---
 
     function calculate() {
         const balance = parseFloat(inputs.balance.value) || 0;
         const riskP = parseFloat(inputs.risk.value) || 0;
-        const sl = parseFloat(inputs.sl.value) || 0;
+        const slPips = parseFloat(inputs.sl.value) || 0;
         const entry = parseFloat(inputs.entry.value) || 0;
-        const target = parseFloat(inputs.target.value) || 0;
+        const commission = parseFloat(inputs.commission.value) || 0;
+        const slippage = parseFloat(inputs.slippage.value) || 0;
 
-        // 1. Risk Amount
+        // 1. Position Sizing
         const riskAmount = balance * (riskP / 100);
-        outputs.riskAmt.innerText = `$${riskAmount.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
-
-        // 2. Position Size (Based on Mode)
         let size = 0;
         let sizeUnit = 'Lot';
 
-        if (sl > 0) {
-            if (currentMode === 'forex') {
-                size = riskAmount / (sl * 10);
-                sizeUnit = 'Lot';
-            } else if (currentMode === 'crypto') {
-                // If they gave entry, size = risk / (entry - sl_price)
-                // Since they gave SL in 'pips/points', we assume unit risk
-                size = riskAmount / sl;
-                sizeUnit = 'Units';
-            } else {
-                size = riskAmount / sl;
-                sizeUnit = 'Shares';
-            }
-        }
-        outputs.size.innerText = `${size.toFixed(2)} ${sizeUnit}`;
-
-        // 3. Reward & RR
-        let rr = 2.0;
-        let reward = riskAmount * rr;
-
-        if (entry > 0 && target > 0) {
-            const distEntryTarget = Math.abs(target - entry);
-            // Rough mapping of SL pips to price distance
-            // Assuming 1 pip = 0.0001 for Forex, 1 unit for Crypto
-            const pipValue = currentMode === 'forex' ? 0.0001 : 1;
-            const slDist = sl * pipValue;
+        if (slPips > 0) {
+            // Adjust SL for slippage
+            const effectiveSL = slPips + slippage;
             
-            if (slDist > 0) {
-                rr = distEntryTarget / slDist;
-                reward = riskAmount * rr;
+            if (currentAsset === 'forex') {
+                size = riskAmount / (effectiveSL * 10);
+                sizeUnit = 'Lots';
+            } else {
+                size = riskAmount / effectiveSL;
+                sizeUnit = currentAsset === 'crypto' ? 'Units' : 'Shares';
             }
         }
 
-        outputs.rewardAmt.innerText = `$${reward.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
-        outputs.rr.innerText = `1:${rr.toFixed(1)}`;
+        outputs.size.innerText = `${size.toFixed(2)} ${sizeUnit}`;
+        outputs.risk.innerText = `$${riskAmount.toLocaleString()}`;
+
+        // 2. Scaling Out & Net Profit
+        const tpInputs = document.querySelectorAll('.tp-price');
+        let totalReward = 0;
+        let weightedRR = 0;
+
+        tpInputs.forEach((input, index) => {
+            const tpPrice = parseFloat(input.value) || 0;
+            if (tpPrice > 0 && entry > 0) {
+                const isLong = tpPrice > entry;
+                const priceDist = Math.abs(tpPrice - entry);
+                
+                // Convert pips to price distance (rough)
+                const pipVal = currentAsset === 'forex' ? 0.0001 : 1;
+                const slDist = slPips * pipVal;
+                
+                if (slDist > 0) {
+                    const rRatio = priceDist / slDist;
+                    const weight = 1 / tpInputs.length; // Simple equal split
+                    const partProfit = riskAmount * rRatio * weight;
+                    totalReward += partProfit;
+                    weightedRR += rRatio * weight;
+                }
+            }
+        });
+
+        // Add default if no targets
+        if (totalReward === 0) {
+            totalReward = riskAmount * 2;
+            weightedRR = 2.0;
+        }
+
+        // Subtract Commissions
+        const totalCommission = size * commission;
+        const netProfit = totalReward - totalCommission;
+
+        outputs.profit.innerText = `$${netProfit.toLocaleString(undefined, {maximumFractionDigits: 0})}`;
+        outputs.profit.className = `value ${netProfit >= 0 ? 'text-green' : 'text-red'}`;
+        outputs.rr.innerText = `1:${weightedRR.toFixed(1)}`;
         
-        const winProb = (1 / (1 + rr)) * 100;
-        outputs.winProb.innerText = `${winProb.toFixed(0)}%`;
+        const winProb = (1 / (1 + weightedRR)) * 100;
+        outputs.win.innerText = `${winProb.toFixed(0)}%`;
 
-        // Update Visuals
-        const totalHeight = 100;
-        const riskH = (1 / (1 + rr)) * totalHeight;
-        const rewardH = (rr / (1 + rr)) * totalHeight;
+        // 3. UI Visuals
+        const totalH = 100;
+        const riskH = (1 / (1 + weightedRR)) * totalH;
+        const rewardH = (weightedRR / (1 + weightedRR)) * totalH;
 
-        visuals.rewardBar.style.height = `${Math.min(rewardH, 85)}%`;
-        visuals.riskBar.style.height = `${Math.max(riskH, 15)}%`;
+        components.barReward.style.height = `${Math.min(rewardH, 80)}%`;
+        components.barRisk.style.height = `${Math.max(riskH, 20)}%`;
+
+        generateEquityProjection(balance, riskP, weightedRR);
     }
 
-    // --- History Management ---
+    // --- Advanced Features ---
 
-    function saveTrade() {
-        const trade = {
-            id: Date.now(),
-            date: new Date().toLocaleDateString(),
-            pair: currentMode === 'forex' ? 'EUR/USD' : (currentMode === 'crypto' ? 'BTC/USD' : 'TSLA'),
-            size: outputs.size.innerText,
-            risk: outputs.riskAmt.innerText,
-            reward: outputs.rewardAmt.innerText,
-            rr: outputs.rr.innerText
-        };
+    function generateEquityProjection(startBal, riskP, rr) {
+        components.chartBars.innerHTML = '';
+        let currentBal = startBal;
+        const trades = 100;
+        const winRate = 0.45; // Default pro winrate
 
-        tradeHistory.unshift(trade);
-        if (tradeHistory.length > 5) tradeHistory.pop();
-        
-        localStorage.setItem('tradeHistory', JSON.stringify(tradeHistory));
-        renderHistory();
-        
-        // Success animation
-        buttons.save.innerText = 'Saved!';
-        setTimeout(() => buttons.save.innerText = 'Save to Journal', 1500);
+        for (let i = 0; i < trades; i++) {
+            const isWin = Math.random() < winRate;
+            const riskAmt = currentBal * (riskP / 100);
+            
+            if (isWin) {
+                currentBal += riskAmt * rr;
+            } else {
+                currentBal -= riskAmt;
+            }
+
+            const bar = document.createElement('div');
+            bar.className = 'c-bar';
+            const height = (currentBal / (startBal * 3)) * 100; // Relative to 3x start
+            bar.style.height = `${Math.min(height, 100)}%`;
+            components.chartBars.appendChild(bar);
+        }
+
+        outputs.endBal.innerText = `$${currentBal.toLocaleString(undefined, {maximumFractionDigits: 0})}`;
+        const growth = ((currentBal - startBal) / startBal) * 100;
+        outputs.growth.innerText = `${growth >= 0 ? '+' : ''}${growth.toFixed(1)}%`;
     }
 
-    function renderHistory() {
-        visuals.historyBody.innerHTML = tradeHistory.map(t => `
-            <tr>
-                <td>${t.date}</td>
-                <td><span class="pill reward">${t.pair}</span></td>
-                <td>${t.size}</td>
-                <td>${t.risk}</td>
-                <td>${t.reward}</td>
-                <td>${t.rr}</td>
-                <td><button class="btn-text delete" onclick="deleteTrade(${t.id})">Delete</button></td>
-            </tr>
+    function initCorrelation() {
+        const pairs = ['EURUSD', 'BTCUSD', 'GOLD', 'TSLA', 'SPX', 'ETHUSD', 'GBPUSD', 'OIL'];
+        components.correlationMatrix.innerHTML = pairs.slice(0, 8).map(p => `
+            <div class="corr-item">
+                <span class="corr-val">${(Math.random() * 2 - 1).toFixed(2)}</span>
+                <span class="corr-pair">${p}</span>
+            </div>
         `).join('');
     }
 
-    window.deleteTrade = (id) => {
-        tradeHistory = tradeHistory.filter(t => t.id !== id);
-        localStorage.setItem('tradeHistory', JSON.stringify(tradeHistory));
-        renderHistory();
-    };
+    function initTicker() {
+        const assets = [
+            { name: 'BTC/USD', price: 64230.50 },
+            { name: 'EUR/USD', price: 1.0842 },
+            { name: 'XAU/USD', price: 2341.20 },
+            { name: 'AAPL', price: 172.50 },
+            { name: 'ETH/BTC', price: 0.0521 }
+        ];
 
-    // --- Utilities ---
-
-    function updateMarketInfo() {
-        const priceEl = document.querySelector('.price-val');
-        const currentPrice = parseFloat(priceEl.innerText);
-        const change = (Math.random() - 0.5) * 0.0002;
-        const newPrice = currentPrice + change;
-        priceEl.innerText = newPrice.toFixed(4);
-        priceEl.className = `price-val ${change >= 0 ? 'up' : 'down'}`;
+        components.ticker.innerHTML = assets.map(a => `
+            <div class="ticker-item" data-price="${a.price}">
+                ${a.name} <span class="up">+0.00%</span>
+            </div>
+        `).join('') + components.ticker.innerHTML; // Duplicate for loop
     }
 
-    function updateTickers() {
-        visuals.tickerItems.forEach(item => {
+    function updateLiveMarket() {
+        const items = document.querySelectorAll('.ticker-item');
+        items.forEach(item => {
             const span = item.querySelector('span');
-            let currentVal = parseFloat(span.innerText);
-            const change = (Math.random() - 0.5) * 0.15;
+            const change = (Math.random() - 0.5) * 0.2;
+            const currentVal = parseFloat(span.innerText);
             const newVal = currentVal + change;
             span.innerText = `${newVal >= 0 ? '+' : ''}${newVal.toFixed(2)}%`;
             span.className = newVal >= 0 ? 'up' : 'down';
         });
+
+        // Update correlation occasionally
+        if (Math.random() > 0.9) initCorrelation();
     }
 
-    // --- Listeners ---
+    // --- Event Listeners ---
 
-    buttons.switches.forEach(btn => {
-        btn.addEventListener('click', () => {
-            buttons.switches.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            currentMode = btn.dataset.mode;
-            
-            // Update UI context based on mode
-            const slLabel = document.querySelector('label[for="stop-loss"]') || document.querySelector('.input-group label:nth-child(1)'); // Fixed selection
-            // Find the SL label specifically
-            const labels = document.querySelectorAll('label');
-            labels.forEach(l => {
-                if(l.innerText.includes('Stop Loss')) {
-                    l.innerText = currentMode === 'forex' ? 'Stop Loss (Pips)' : 'Stop Loss (Points)';
-                }
-            });
-
+    document.querySelectorAll('.asset-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('.asset-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            currentAsset = tab.dataset.asset;
             calculate();
         });
     });
 
-    // Add listeners to ALL inputs for instant dynamism
-    Object.values(inputs).forEach(input => {
+    [...Object.values(inputs)].forEach(input => {
         input.addEventListener('input', calculate);
-        input.addEventListener('change', calculate);
     });
 
-    buttons.calculate.addEventListener('click', () => {
+    document.getElementById('add-tp').addEventListener('click', () => {
+        const list = document.getElementById('tp-list');
+        const count = list.children.length + 1;
+        const div = document.createElement('div');
+        div.className = 'tp-item';
+        div.innerHTML = `<label>TP ${count}</label><input type="number" class="tp-price" placeholder="Target ${count}">`;
+        list.appendChild(div);
+        div.querySelector('input').addEventListener('input', calculate);
         calculate();
-        // Add a "calculating" ripple effect
-        buttons.calculate.style.opacity = '0.7';
-        setTimeout(() => buttons.calculate.style.opacity = '1', 200);
     });
 
-    buttons.save.addEventListener('click', saveTrade);
-    buttons.clear.addEventListener('click', () => {
-        if(confirm('Are you sure you want to clear your trade journal?')) {
-            tradeHistory = [];
-            localStorage.removeItem('tradeHistory');
-            renderHistory();
-        }
+    document.getElementById('save-btn').addEventListener('click', () => {
+        const trade = {
+            id: Date.now(),
+            time: new Date().toLocaleTimeString(),
+            asset: currentAsset.toUpperCase(),
+            rr: outputs.rr.innerText,
+            profit: outputs.profit.innerText,
+            status: 'PLANNED'
+        };
+        vaultData.unshift(trade);
+        localStorage.setItem('tradeVault', JSON.stringify(vaultData));
+        renderVault();
     });
 
-    // Init
-    setInterval(updateTickers, 2500);
-    setInterval(updateMarketInfo, 1500);
+    function renderVault() {
+        document.getElementById('vault-body').innerHTML = vaultData.map(v => `
+            <tr>
+                <td>${v.time}</td>
+                <td><strong>${v.asset}</strong></td>
+                <td>${v.rr}</td>
+                <td class="text-green">${v.profit}</td>
+                <td><span class="pill">${v.status}</span></td>
+            </tr>
+        `).join('');
+    }
+
+    // --- Init ---
+    initTicker();
+    initCorrelation();
+    setInterval(updateLiveMarket, 2000);
     calculate();
-    renderHistory();
+    renderVault();
 });
