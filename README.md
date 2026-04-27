@@ -6,6 +6,12 @@
 
 **RiskMaster Platinum** is the world's most advanced web-based risk management suite for professional traders. Engineered for elite execution, this version is built to a "Product Hunt Launch" standard, featuring industry-leading analytics, scaling logic, and institutional-grade aesthetics.
 
+## 📖 About the Project
+
+In the high-stakes world of trading, risk management is the boundary between success and liquidation. Most traders fail not because of their strategy, but because of poor position sizing and lack of emotional control during execution. 
+
+**RiskMaster Platinum** was developed to bridge this gap. It provides a institutional-grade terminal experience that automates the complex math behind every trade. From calculating weighted R:R across multiple scaling targets to projecting your account's equity curve over 100 trades, this tool ensures you enter every position with the precision of a quantitative hedge fund.
+
 ---
 
 ## 🔥 New in Version 2.0 (Platinum)
